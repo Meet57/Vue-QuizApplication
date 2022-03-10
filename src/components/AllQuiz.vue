@@ -1,15 +1,26 @@
 <template>
     <div class="container">
+        <a-modal
+            title="Your Name"
+            :visible="visible"
+            :cenetered="false"
+            :closable="false"
+            @ok="saveName"
+            okText="Save"
+            :cancelButtonProps="{ style: { display: 'none' } }"
+        >
+            <a-input v-model="name" placeholder="Name" />
+        </a-modal>
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-blue-500">All Quiz</h1>
             <div>
-                <a-button type="primary" class="mt-3 ml-3" @click="createForm" ghost> Submissions </a-button>
+                <a-button type="primary" class="mt-3 ml-3" @click="submissions" ghost> Submissions </a-button>
                 <a-button type="primary" class="mt-3 ml-3" @click="createForm" ghost> Create Quiz </a-button>
             </div>
         </div>
         <div class="flex" v-if="quiz">
             <div class="flex" v-for="qu in quiz" :key="qu.id">
-                <a-card :title="qu.title" style="width: 400px; margin: 20px">
+                <a-card :title="qu.quiz" style="width: 400px; margin: 20px">
                     <div slot="extra" class="flex">
                         <a-popconfirm title="Are you sure？" ok-text="Yes" cancel-text="No" @confirm="deletequiz(qu.id)">
                             <img
@@ -28,7 +39,9 @@
                 </a-card>
             </div>
         </div>
-        <div class="m-5" v-else>Loading</div>
+        <div class="m-5 flex justify-center" v-else>
+            <a-spin size="large" />
+        </div>
     </div>
 </template>
 
@@ -39,9 +52,14 @@ export default {
     data() {
         return {
             quiz: null,
+            visible: false,
+            name: "",
         };
     },
     methods: {
+        submissions() {
+            this.$router.push("/submissions");
+        },
         createForm() {
             this.$router.push("/create");
         },
@@ -54,8 +72,17 @@ export default {
                     .catch(() => {});
             });
         },
+        saveName() {
+            if (this.name.length > 0) {
+                localStorage.setItem("name", this.name);
+                this.visible = false;
+            }
+        },
     },
     created() {
+        if (!localStorage.getItem("name")) {
+            this.visible = true;
+        }
         getQuizes()
             .then((data) => {
                 this.quiz = data;

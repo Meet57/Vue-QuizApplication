@@ -8,7 +8,9 @@
             <div class="text-3xl text-teal-700">You scored {{ result }}</div>
         </div>
         <div v-else>
-            <div v-if="data == null" class="mx-5">Loading</div>
+            <div v-if="data == null" class="flex justify-center">
+                <a-spin size="large" />
+            </div>
             <div v-else class="mx-5">
                 <h1 class="text-3xl mt-5 text-green-800">{{ data.quiz }}</h1>
                 <div class="mt-4" v-for="(value, index) in data.questions" :key="index" :id="index">
@@ -37,7 +39,7 @@
 </template>
 
 <script>
-import { getQuiz } from "../API/api";
+import { getQuiz, submitSubmission } from "../API/api";
 export default {
     name: "take-quiz",
     created() {
@@ -94,6 +96,8 @@ export default {
                     score = this.marks.filter((value) => value == true).length;
                 }
                 this.result = `${score}/${this.marks.length}`;
+                console.log(localStorage.getItem("name"));
+                submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result);
             } else {
                 let incomplete = [];
                 this.marks.map((value, id) => {

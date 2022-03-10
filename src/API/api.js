@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, query, orderBy, getDocs, getFirestore, updateDoc, serverTimestamp } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDoGMCqROerC7Uu3RrxR5Igy9uvHWVJAhk",
@@ -26,7 +26,8 @@ export const getQuiz = (id) => {
 
 export const getQuizes = () => {
     return new Promise((resolve, reject) => {
-        getDocs(collection(db, "quiz"))
+        let q = query(collection(db, "quiz"), orderBy("createdAt", "desc"));
+        getDocs(q)
             .then((data) => {
                 let a = [];
                 data.forEach((data) => {
@@ -40,7 +41,7 @@ export const getQuizes = () => {
 
 export const createQuiz = (data) => {
     return new Promise((resolve, reject) => {
-        addDoc(collection(db, "quiz"), data)
+        addDoc(collection(db, "quiz"), { ...data, createdAt: serverTimestamp() })
             .then(() => {
                 resolve();
             })
@@ -65,5 +66,30 @@ export const deleteQuiz = (id) => {
             .catch(() => {
                 reject();
             });
+    });
+};
+
+export const getSubmissions = () => {
+    return new Promise((resolve, reject) => {
+        let q = query(collection(db, "submissions"), orderBy("createdAt", "desc"));
+        getDocs(q)
+            .then((data) => {
+                let a = [];
+                data.forEach((data) => {
+                    a.push({ ...data.data(), id: data.id });
+                });
+                resolve(a);
+            })
+            .catch((err) => reject(err));
+    });
+};
+
+export const submitSubmission = (name, quiz, score) => {
+    return new Promise((resolve, reject) => {
+        addDoc(collection(db, "submissions"), { name, quiz, score, createdAt: serverTimestamp() })
+            .then(() => {
+                resolve();
+            })
+            .catch(() => reject());
     });
 };

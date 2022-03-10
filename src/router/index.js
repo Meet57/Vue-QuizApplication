@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import AllQuiz from "../components/AllQuiz";
 import CreateQuiz from "../components/CreateQuiz";
 import TakeQuiz from "../components/TakeQuiz";
+import Submissions from "../components/Submissions";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
         path: "/edit/:id",
         name: "edit-quiz",
         component: CreateQuiz,
+    },
+    {
+        path: "/submissions",
+        name: "submissions",
+        component: Submissions,
     },
     {
         path: "/quiz/:id",

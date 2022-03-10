@@ -8,7 +8,7 @@
         </div>
         <div class="flex justify-center">
             <div>
-                <a-input size="large" id="title" v-model="data.title" placeholder="Quiz Title" style="width: 300px" />
+                <a-input size="large" id="quiz" v-model="data.quiz" placeholder="Quiz Title" style="width: 300px" />
                 <br />
                 <br />
                 Negative Marking :
@@ -48,7 +48,7 @@ export default {
     data() {
         return {
             data: {
-                title: "",
+                quiz: "",
                 questions: [{}],
                 negative: false,
             },
@@ -59,8 +59,8 @@ export default {
             this.data.questions.push({});
         },
         createForm() {
-            if (this.data.title == "") {
-                let incomplete = document.getElementById("title");
+            if (this.data.quiz == "") {
+                let incomplete = document.getElementById("quiz");
                 incomplete.classList.add("shake");
                 setTimeout(() => {
                     incomplete.classList.remove("shake");
