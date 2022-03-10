@@ -120,7 +120,6 @@ export default {
 <style scoped>
 .ant-radio-wrapper {
     display: block !important;
-    color: red;
 }
 
 .shake {
