@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { createQuiz } from "../API/api";
+
 import QuestionCardVue from "./QuestionCard.vue";
 export default {
     name: "create-quiz",
@@ -33,11 +35,12 @@ export default {
     },
     methods: {
         addQuestion() {
-            console.log("as");
             this.questions.push({});
         },
         createForm() {
-            console.log({ quiz: this.title, questions: this.questions });
+            createQuiz({ quiz: this.title, questions: this.questions }).then(() => {
+                this.$router.push("/");
+            });
         },
         back() {
             this.$router.push("/");
