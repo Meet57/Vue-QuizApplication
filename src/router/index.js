@@ -18,6 +18,11 @@ const routes = [
         component: CreateQuiz,
     },
     {
+        path: "/edit/:id",
+        name: "edit-quiz",
+        component: CreateQuiz,
+    },
+    {
         path: "/quiz/:id",
         name: "take-quiz",
         component: TakeQuiz,

@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDoGMCqROerC7Uu3RrxR5Igy9uvHWVJAhk",
@@ -19,7 +19,7 @@ const db = getFirestore();
 export const getQuiz = (id) => {
     return new Promise((resolve) => {
         getDoc(doc(db, "quiz", id)).then((data) => {
-            resolve(data.data());
+            resolve({ ...data.data(), id: data.id });
         });
     });
 };
@@ -44,6 +44,14 @@ export const createQuiz = (data) => {
             .then(() => {
                 resolve();
             })
+            .catch(() => reject());
+    });
+};
+
+export const editQuiz = (data) => {
+    return new Promise((resolve, reject) => {
+        updateDoc(doc(collection(db, "quiz"), data.id), data)
+            .then(() => resolve())
             .catch(() => reject());
     });
 };

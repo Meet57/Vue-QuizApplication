@@ -2,3 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.ant-radio-wrapper {
+    display: block !important;
+    color: red;
+}
