@@ -43,10 +43,14 @@ import { getQuiz, submitSubmission } from "../API/api";
 export default {
     name: "take-quiz",
     created() {
-        getQuiz(this.id).then((data) => {
-            this.data = data;
-            this.marks = Array(data.questions.length).fill(null);
-        });
+        getQuiz(this.id)
+            .then((data) => {
+                this.data = data;
+                this.marks = Array(data.questions.length).fill(null);
+            })
+            .catch(() => {
+                this.$router.push("/404/");
+            });
     },
     data() {
         return {

@@ -4,6 +4,7 @@ import AllQuiz from "../components/AllQuiz";
 import CreateQuiz from "../components/CreateQuiz";
 import TakeQuiz from "../components/TakeQuiz";
 import Submissions from "../components/Submissions";
+import ErrorPage from "../components/ErrorPage";
 
 Vue.use(VueRouter);
 
@@ -32,7 +33,11 @@ const routes = [
         path: "/quiz/:id",
         name: "take-quiz",
         component: TakeQuiz,
-        props: true,
+    },
+    {
+        path: "/404/",
+        name: "error-page",
+        component: ErrorPage,
     },
 ];
 

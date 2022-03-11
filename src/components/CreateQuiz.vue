@@ -6,7 +6,7 @@
             </h1>
             <a-button type="danger" class="mt-3 ml-3" @click="back" ghost> Back </a-button>
         </div>
-        <div class="flex justify-center">
+        <div class="flex justify-center" v-if="!loading">
             <div>
                 <a-input size="large" id="quiz" v-model="data.quiz" placeholder="Quiz Title" style="width: 300px" />
                 <br />
@@ -26,6 +26,9 @@
                 </a-button>
             </div>
         </div>
+        <div class="m-5 flex justify-center" v-else>
+            <a-spin size="large" />
+        </div>
     </div>
 </template>
 
@@ -37,9 +40,15 @@ export default {
     name: "create-quiz",
     created() {
         if (this.$route.params.id) {
-            getQuiz(this.$route.params.id).then((data) => {
-                this.data = data;
-            });
+            getQuiz(this.$route.params.id)
+                .then((data) => {
+                    if (!data.quiz) {
+                        this.$router.push("/404/");
+                    }
+                    this.data = data;
+                    this.loading = false;
+                })
+                .catch(() => {});
         }
     },
     components: {
@@ -51,6 +60,7 @@ export default {
                 quiz: "",
                 questions: [{}],
                 negative: false,
+                loading: true,
             },
         };
     },

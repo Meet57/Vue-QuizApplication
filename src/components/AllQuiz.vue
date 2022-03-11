@@ -83,11 +83,9 @@ export default {
         if (!localStorage.getItem("name")) {
             this.visible = true;
         }
-        getQuizes()
-            .then((data) => {
-                this.quiz = data;
-            })
-            .catch(() => {});
+        getQuizes().then((data) => {
+            this.quiz = data;
+        });
     },
 };
 </script>

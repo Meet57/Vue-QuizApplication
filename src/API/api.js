@@ -17,79 +17,43 @@ initializeApp(firebaseConfig);
 const db = getFirestore();
 
 export const getQuiz = (id) => {
-    return new Promise((resolve) => {
-        getDoc(doc(db, "quiz", id)).then((data) => {
-            resolve({ ...data.data(), id: data.id });
-        });
-    });
+    return getDoc(doc(db, "quiz", id))
+        .then((data) => ({ ...data.data(), id: data.id }))
+        .catch((err) => err);
 };
 
 export const getQuizes = () => {
-    return new Promise((resolve, reject) => {
-        let q = query(collection(db, "quiz"), orderBy("createdAt", "desc"));
-        getDocs(q)
-            .then((data) => {
-                let a = [];
-                data.forEach((data) => {
-                    a.push({ ...data.data(), id: data.id });
-                });
-                resolve(a);
-            })
-            .catch((err) => reject(err));
-    });
+    let q = query(collection(db, "quiz"), orderBy("createdAt", "desc"));
+    return getDocs(q).then((data) => data.docs.map((d) => ({ ...d.data(), id: d.id })));
 };
 
 export const createQuiz = (data) => {
-    return new Promise((resolve, reject) => {
-        addDoc(collection(db, "quiz"), { ...data, createdAt: serverTimestamp() })
-            .then(() => {
-                resolve();
-            })
-            .catch(() => reject());
-    });
+    return addDoc(collection(db, "quiz"), { ...data, createdAt: serverTimestamp() })
+        .then((data) => data)
+        .catch((err) => err);
 };
 
 export const editQuiz = (data) => {
-    return new Promise((resolve, reject) => {
-        updateDoc(doc(collection(db, "quiz"), data.id), data)
-            .then(() => resolve())
-            .catch(() => reject());
-    });
+    return updateDoc(doc(collection(db, "quiz"), data.id), data)
+        .then((data) => data)
+        .catch((err) => err);
 };
 
 export const deleteQuiz = (id) => {
-    return new Promise((resolve, reject) => {
-        deleteDoc(doc(db, "quiz", id))
-            .then(() => {
-                resolve();
-            })
-            .catch(() => {
-                reject();
-            });
-    });
+    return deleteDoc(doc(db, "quiz", id));
 };
 
 export const getSubmissions = () => {
-    return new Promise((resolve, reject) => {
-        let q = query(collection(db, "submissions"), orderBy("createdAt", "desc"));
-        getDocs(q)
-            .then((data) => {
-                let a = [];
-                data.forEach((data) => {
-                    a.push({ ...data.data(), id: data.id });
-                });
-                resolve(a);
-            })
-            .catch((err) => reject(err));
-    });
+    let q = query(collection(db, "submissions"), orderBy("createdAt", "desc"));
+    return getDocs(q)
+        .then((data) => data.docs.map((d) => ({ ...d.data(), id: d.id })))
+        .catch((err) => err);
 };
 
 export const submitSubmission = (name, quiz, score) => {
-    return new Promise((resolve, reject) => {
-        addDoc(collection(db, "submissions"), { name, quiz, score, createdAt: serverTimestamp() })
-            .then(() => {
-                resolve();
-            })
-            .catch(() => reject());
-    });
+    return addDoc(collection(db, "submissions"), { name, quiz, score, createdAt: serverTimestamp() })
+        .then((data) => {
+            data;
+        })
+        .catch((err) => err);
 };
