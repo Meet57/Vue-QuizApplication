@@ -49,7 +49,7 @@
 import MultipleFormItem from "./MultipleFormItem.vue";
 import OptionValues from "./OptionValues.vue";
 export default {
-    name: "QuestionCard",
+    name: "CreateQuestionCard",
     components: {
         OptionValues,
         MultipleFormItem,

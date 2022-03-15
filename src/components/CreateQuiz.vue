@@ -1,11 +1,16 @@
 <template>
     <div class="container">
         <div class="flex justify-between place-items-center mx-5">
-            <h1 class="text-4xl mt-5 text-blue-500">Create Quiz</h1>
+            <h1 class="text-4xl mt-5 text-blue-500">
+                {{ data.id ? "Edit Quiz" : "Create Quiz" }}
+            </h1>
             <a-button type="danger" class="mt-3 ml-3" @click="$router.push('/')"> Back </a-button>
         </div>
         <div class="flex justify-center">
-            <div>
+            <div v-if="loading">
+                <a-spin size="large" />
+            </div>
+            <div v-else>
                 <a-input size="large" id="quiz" v-model="data.quiz" placeholder="Quiz Title" style="width: 300px" />
                 <br />
                 <br />
@@ -30,7 +35,9 @@
                         />
                     </template>
                 </MultipleFormItem>
-                <a-button type="info" class="mt-3 ml-3" @click="create('Incomplete Questions')"> Create Quiz </a-button>
+                <a-button type="info" size="large" class="my-3" @click="create('Incomplete Questions')">
+                    {{ data.id ? "Update Quiz" : "Create Quiz" }}
+                </a-button>
             </div>
         </div>
     </div>
@@ -39,15 +46,31 @@
 <script>
 import CreateQuestionCard from "./CreateQuestionCard.vue";
 import MultipleFormItem from "./MultipleFormItem.vue";
-import { createQuiz } from "@/API/api";
+import { createQuiz, editQuiz, getQuiz } from "@/API/api";
 export default {
     name: "CreateQuiz",
     components: {
         CreateQuestionCard,
         MultipleFormItem,
     },
+    created() {
+        if (this.$route.params.id) {
+            getQuiz(this.$route.params.id)
+                .then((data) => {
+                    if (!data.quiz) {
+                        this.$router.push("/404/");
+                    }
+                    this.data = data;
+                    this.loading = false;
+                })
+                .catch(() => {});
+        } else {
+            this.loading = false;
+        }
+    },
     data() {
         return {
+            loading: true,
             data: {
                 quiz: "",
                 negative: false,
@@ -74,10 +97,16 @@ export default {
             } else if (!this.checkForTextInArray(this.data.questions)) {
                 this.openNotification("error", "Invalid Quiz Data", "Please check for empty Field");
             } else {
-                this.openNotification("success", "Quiz Created");
-                createQuiz(this.data).then(() => {
-                    this.$router.push("/");
-                });
+                if (this.data.id) {
+                    editQuiz(this.data).then(() => {
+                        this.$router.push("/");
+                    });
+                } else {
+                    this.openNotification("success", "Quiz Created");
+                    createQuiz(this.data).then(() => {
+                        this.$router.push("/");
+                    });
+                }
             }
         },
         openNotification(type, title, body = " ") {

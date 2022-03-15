@@ -9,16 +9,27 @@
                 <a-spin size="large" />
             </div>
             <div v-else class="mx-5">
-                {{ data }}
+                <MultipleFormItem v-model="data.questions">
+                    <template v-slot="{ item, index }">
+                        <TakeQuestionCard :value="item" :index="index" @select="onChange($event, index, item.answer)" />
+                    </template>
+                </MultipleFormItem>
+                <a-button type="info" size="large" class="mt-3" @click="submit"> Submit </a-button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { getQuiz } from "../API/api";
+import { getQuiz, submitSubmission } from "../API/api";
+import MultipleFormItem from "./MultipleFormItem.vue";
+import TakeQuestionCard from "./TakeQuestionCard.vue";
 export default {
     name: "take-quiz",
+    components: {
+        MultipleFormItem,
+        TakeQuestionCard,
+    },
     created() {
         getQuiz(this.id)
             .then((data) => {
@@ -38,6 +49,12 @@ export default {
         };
     },
     methods: {
+        canSubmit() {
+            if (this.marks.filter((value) => value == null).length) {
+                return false;
+            }
+            return true;
+        },
         onChange(value, index, answer) {
             this.marks.splice(index, 1, value == answer);
         },
@@ -47,6 +64,44 @@ export default {
             setTimeout(() => {
                 incomplete.classList.remove("shake");
             }, 1000);
+        },
+        openNotification(type, title, body) {
+            this.$notification[type]({
+                message: title,
+                description: body,
+            });
+        },
+        submit() {
+            if (this.canSubmit()) {
+                let score = 0;
+                if (this.data.negative) {
+                    this.marks.map((value) => {
+                        if (value == 1) {
+                            score += 1;
+                        } else {
+                            score -= 0.25;
+                        }
+                    });
+                } else {
+                    score = this.marks.filter((value) => value == true).length;
+                }
+                this.result = `${score}/${this.marks.length}`;
+                submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result).then(() => {
+                    this.$router.push("/");
+                    this.openNotification("success", "Your Score", this.result);
+                });
+            } else {
+                let incomplete = [];
+                this.openNotification("error", "Complete All Questions", "It is compulsory to attempt all questions");
+                this.marks.map((value, id) => {
+                    if (value == null) {
+                        incomplete.push(id);
+                    }
+                });
+                incomplete.forEach((id) => {
+                    this.vibrateQuestion("question" + id);
+                });
+            }
         },
         back() {
             this.$router.push("/");
