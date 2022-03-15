@@ -2,44 +2,21 @@
     <div class="container">
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-blue-500">Take Quiz</h1>
-            <a-button type="danger" class="mt-3 ml-3" @click="back" ghost> Back </a-button>
+            <a-button type="danger" class="mt-3 ml-3" @click="back"> Back </a-button>
         </div>
-        <div class="mx-5" v-if="result.length > 0">
-            <div class="text-3xl text-teal-700">You scored {{ result }}</div>
-        </div>
-        <div v-else>
+        <div>
             <div v-if="data == null" class="flex justify-center">
                 <a-spin size="large" />
             </div>
             <div v-else class="mx-5">
-                <h1 class="text-3xl mt-5 text-green-800">{{ data.quiz }}</h1>
-                <div class="mt-4" v-for="(value, index) in data.questions" :key="index" :id="index">
-                    <div class="text-xl">{{ index + 1 }} : {{ value.question }} <span class="text-red-700">*</span></div>
-                    <div class="options ml-8">
-                        <a-radio-group
-                            :options="getOptions(value)"
-                            @change="
-                                (e) => {
-                                    onChange(e.target.value, index, value.answer);
-                                }
-                            "
-                        />
-                    </div>
-                </div>
-                <button
-                    class="mt-3 ml-3 text-xl border border-green-400 hover:bg-green-500 hover:text-white px-2 py-1 rounded-md"
-                    v-on:click="submit"
-                    ghost
-                >
-                    Submit
-                </button>
+                {{ data }}
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { getQuiz, submitSubmission } from "../API/api";
+import { getQuiz } from "../API/api";
 export default {
     name: "take-quiz",
     created() {
@@ -64,55 +41,12 @@ export default {
         onChange(value, index, answer) {
             this.marks.splice(index, 1, value == answer);
         },
-        getOptions(value) {
-            let a = [];
-            a.push({ value: value.option1, label: value.option1 });
-            a.push({ value: value.option2, label: value.option2 });
-            a.push({ value: value.option3, label: value.option3 });
-            a.push({ value: value.option4, label: value.option4 });
-            return a;
-        },
-        canSubmit() {
-            if (this.marks.filter((value) => value == null).length) {
-                return false;
-            }
-            return true;
-        },
         vibrateQuestion(id) {
             let incomplete = document.getElementById(id);
             incomplete.classList.add("shake");
             setTimeout(() => {
                 incomplete.classList.remove("shake");
             }, 1000);
-        },
-        submit() {
-            if (this.canSubmit()) {
-                let score = 0;
-                if (this.data.negative) {
-                    this.marks.map((value) => {
-                        if (value == 1) {
-                            score += 1;
-                        } else {
-                            score -= 0.25;
-                        }
-                    });
-                } else {
-                    score = this.marks.filter((value) => value == true).length;
-                }
-                this.result = `${score}/${this.marks.length}`;
-                console.log(localStorage.getItem("name"));
-                submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result);
-            } else {
-                let incomplete = [];
-                this.marks.map((value, id) => {
-                    if (value == null) {
-                        incomplete.push(id);
-                    }
-                });
-                incomplete.forEach((id) => {
-                    this.vibrateQuestion(id);
-                });
-            }
         },
         back() {
             this.$router.push("/");

@@ -4,4 +4,8 @@
     </div>
 </template>
 
-<style></style>
+<style>
+img {
+    cursor: pointer;
+}
+</style>

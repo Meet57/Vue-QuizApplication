@@ -14,8 +14,8 @@
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-blue-500">All Quiz</h1>
             <div>
-                <a-button type="primary" class="mt-3 ml-3" @click="submissions" ghost> Submissions </a-button>
-                <a-button type="primary" class="mt-3 ml-3" @click="createForm" ghost> Create Quiz </a-button>
+                <a-button type="primary" class="mt-3 ml-3" @click="submissions"> Submissions </a-button>
+                <a-button type="primary" class="mt-3 ml-3" @click="createForm"> Create Quiz </a-button>
             </div>
         </div>
         <div class="flex" v-if="quiz">
@@ -33,7 +33,7 @@
                             <img style="width: 20px; height: 20px" src="https://img.icons8.com/ios-glyphs/30/000000/edit--v1.png" />
                         </router-link>
                         <router-link v-bind:to="'/quiz/' + qu.id">
-                            <a-button type="danger" ghost> Take Quiz </a-button>
+                            <a-button type="danger"> Take Quiz </a-button>
                         </router-link>
                     </div>
                 </a-card>

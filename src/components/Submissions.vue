@@ -2,7 +2,7 @@
     <div class="container">
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-blue-500">Submissions</h1>
-            <a-button type="danger" class="mt-3 ml-3" @click="back" ghost> Back </a-button>
+            <a-button type="danger" class="mt-3 ml-3" @click="back"> Back </a-button>
         </div>
         <div v-if="submissions" class="mx-5">
             <a-table :columns="columns" :data-source="submissions" :rowKey="(t) => t.id">
