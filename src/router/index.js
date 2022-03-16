@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import AllQuiz from "../components/AllQuiz";
+import Dashboard from "../components/Dashboard";
 import CreateQuiz from "../components/CreateQuiz";
 import TakeQuiz from "../components/TakeQuiz";
 import Submissions from "../components/Submissions";
@@ -12,7 +12,7 @@ const routes = [
     {
         path: "/",
         name: "all-quiz",
-        component: AllQuiz,
+        component: Dashboard,
     },
     {
         path: "/create",

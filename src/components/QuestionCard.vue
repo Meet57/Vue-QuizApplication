@@ -9,14 +9,14 @@
                 <div class="flex">
                     <img
                         v-if="canDelete"
-                        v-on:click="$emit('delete')"
+                        @click="$emit('delete')"
                         :title="'Delete Question'"
                         style="height: 30px; width: 30px"
                         src="https://img.icons8.com/fluency/144/000000/cancel.png"
                     />
                     <img
                         v-if="canAdd"
-                        v-on:click="$emit('add')"
+                        @click="$emit('add')"
                         :title="'Add Question'"
                         style="height: 30px; width: 30px"
                         src="https://img.icons8.com/color/48/000000/add--v1.png"
@@ -25,13 +25,23 @@
             </div>
             <slot name="options">
                 <MultipleFormItem v-model="options">
-                    <template v-slot="{ index, item, updateItem, deleteItem, canAdd, addItem, canDelete }">
-                        <OptionValues
+                    <template
+                        #default="{
+                            index,
+                            item,
+                            updateItem,
+                            deleteItem,
+                            canAdd,
+                            addItem,
+                            canDelete,
+                        }"
+                    >
+                        <QuestionCardOptions
                             :key="item.id"
                             :value="item"
                             :index="index"
-                            :canAdd="canAdd"
-                            :canDelete="canDelete"
+                            :can-add="canAdd"
+                            :can-delete="canDelete"
                             @add="addItem()"
                             @update="updateItem($event, item.id)"
                             @delete="deleteItem(item.id)"
@@ -41,7 +51,13 @@
                 <br />
                 <div class="flex items-center">
                     <div class="text-green-600 mr-3 text-xl">Answer</div>
-                    <a-select style="width: 200px" placeholder="Answer" v-model="answer" :options="answerOptions"> </a-select>
+                    <a-select
+                        style="width: 200px"
+                        placeholder="Answer"
+                        v-model="answer"
+                        :options="answerOptions"
+                    >
+                    </a-select>
                 </div>
             </slot>
         </a-card>
@@ -50,11 +66,11 @@
 
 <script>
 import MultipleFormItem from "./MultipleFormItem.vue";
-import OptionValues from "./OptionValues.vue";
+import QuestionCardOptions from "./QuestionCardOptions.vue";
 export default {
     name: "QuestionCard",
     components: {
-        OptionValues,
+        QuestionCardOptions,
         MultipleFormItem,
     },
     props: {

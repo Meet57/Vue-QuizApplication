@@ -11,7 +11,13 @@
                 <a-spin size="large" />
             </div>
             <div v-else>
-                <a-input size="large" id="quiz" v-model="data.quiz" placeholder="Quiz Title" style="width: 300px" />
+                <a-input
+                    size="large"
+                    id="quiz"
+                    v-model="data.quiz"
+                    placeholder="Quiz Title"
+                    style="width: 300px"
+                />
                 <br />
                 <br />
                 Negative Marking :
@@ -22,13 +28,23 @@
                 <br />
                 <br />
                 <MultipleFormItem v-model="data.questions">
-                    <template v-slot="{ index, item, updateItem, deleteItem, canAdd, addItem, canDelete }">
+                    <template
+                        #default="{
+                            index,
+                            item,
+                            updateItem,
+                            deleteItem,
+                            canAdd,
+                            addItem,
+                            canDelete,
+                        }"
+                    >
                         <QuestionCard
                             :key="item.id"
                             :value="item"
                             :index="index"
-                            :canAdd="canAdd"
-                            :canDelete="canDelete"
+                            :can-add="canAdd"
+                            :can-delete="canDelete"
                             :disable="false"
                             @add="addItem({ options: [{ id: Date.now() }] })"
                             @update="updateItem($event, item.id)"

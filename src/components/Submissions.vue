@@ -6,7 +6,11 @@
         </div>
         <div v-if="submissions" class="mx-5">
             <a-table :columns="columns" :data-source="submissions" :rowKey="(t) => t.id">
-                <div slot="filterDropdown" slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }" style="padding: 8px">
+                <div
+                    slot="filterDropdown"
+                    slot-scope="{ setSelectedKeys, selectedKeys, confirm, clearFilters, column }"
+                    style="padding: 8px"
+                >
                     <a-input
                         v-ant-ref="(c) => (searchInput = c)"
                         :placeholder="`Search ${column.dataIndex}`"
@@ -24,9 +28,20 @@
                     >
                         Search
                     </a-button>
-                    <a-button size="small" style="width: 90px" @click="() => handleReset(clearFilters)"> Reset </a-button>
+                    <a-button
+                        size="small"
+                        style="width: 90px"
+                        @click="() => handleReset(clearFilters)"
+                    >
+                        Reset
+                    </a-button>
                 </div>
-                <a-icon slot="filterIcon" slot-scope="filtered" type="search" :style="{ color: filtered ? '#108ee9' : undefined }" />
+                <a-icon
+                    slot="filterIcon"
+                    slot-scope="filtered"
+                    type="search"
+                    :style="{ color: filtered ? '#108ee9' : undefined }"
+                />
             </a-table>
             <!-- {{ submissions }} -->
         </div>
@@ -77,7 +92,8 @@ export default {
                         filterIcon: "filterIcon",
                         customRender: "customRender",
                     },
-                    onFilter: (value, record) => record.name.toString().toLowerCase().includes(value.toLowerCase()),
+                    onFilter: (value, record) =>
+                        record.name.toString().toLowerCase().includes(value.toLowerCase()),
                     onFilterDropdownVisibleChange: (visible) => {
                         if (visible) {
                             setTimeout(() => {

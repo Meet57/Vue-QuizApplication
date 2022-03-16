@@ -5,10 +5,10 @@
                 :item="currentItem"
                 :index="index"
                 :addItem="addItem"
-                :updateItem="(data, id) => updateItem(data, id)"
-                :deleteItem="(id) => deleteItem(id)"
-                :canAdd="index == value.length - 1"
-                :canDelete="value.length !== 1"
+                :update-item="(data, id) => updateItem(data, id)"
+                :delete-item="(id) => deleteItem(id)"
+                :can-add="index == value.length - 1"
+                :can-delete="value.length !== 1"
             >
                 Nothing There
             </slot>

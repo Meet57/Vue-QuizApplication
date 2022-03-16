@@ -10,10 +10,18 @@
             </div>
             <div v-else class="mx-5">
                 <MultipleFormItem v-model="data.questions">
-                    <template v-slot="{ item, index }">
-                        <QuestionCard :id="'question' + index" :value="item" :disable="true" :index="index">
+                    <template #default="{ item, index }">
+                        <QuestionCard
+                            :id="'question' + index"
+                            :value="item"
+                            :disable="true"
+                            :index="index"
+                        >
                             <template #options>
-                                <a-radio-group :options="getOptions(item.options)" @change="onChange($event.target.value, index, item.answer)" />
+                                <a-radio-group
+                                    :options="getOptions(item.options)"
+                                    @change="onChange($event.target.value, index, item.answer)"
+                                />
                             </template>
                         </QuestionCard>
                     </template>
@@ -93,13 +101,19 @@ export default {
                     score = this.marks.filter((value) => value == true).length;
                 }
                 this.result = `${score}/${this.marks.length}`;
-                submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result).then(() => {
-                    this.$router.push("/");
-                    this.openNotification("success", "Your Score", this.result);
-                });
+                submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result).then(
+                    () => {
+                        this.$router.push("/");
+                        this.openNotification("success", "Your Score", this.result);
+                    }
+                );
             } else {
                 let incomplete = [];
-                this.openNotification("error", "Complete All Questions", "It is compulsory to attempt all questions");
+                this.openNotification(
+                    "error",
+                    "Complete All Questions",
+                    "It is compulsory to attempt all questions"
+                );
                 this.marks.map((value, id) => {
                     if (value == null) {
                         incomplete.push(id);
