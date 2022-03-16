@@ -18,7 +18,7 @@
 
 <script>
 export default {
-    name: "error-name",
+    name: "ErrorPage",
 };
 </script>
 

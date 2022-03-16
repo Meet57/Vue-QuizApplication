@@ -6,6 +6,7 @@
             :cenetered="false"
             :closable="false"
             @ok="saveName"
+            @keyup.enter.native="saveName"
             okText="Save"
             :cancelButtonProps="{ style: { display: 'none' } }"
         >
@@ -48,7 +49,7 @@
 <script>
 import { deleteQuiz, getQuizes } from "../API/api";
 export default {
-    name: "all-quiz",
+    name: "AllQuiz",
     data() {
         return {
             quiz: null,

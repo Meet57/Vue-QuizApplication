@@ -36,7 +36,11 @@ export default {
     methods: {
         updateItem(data, id) {
             const index = _.findIndex(this.value, { id });
-            this.$emit("change", [...this.value.slice(0, index), { ...this.value[index], ...data }, ...this.value.slice(index + 1)]);
+            this.$emit("change", [
+                ...this.value.slice(0, index),
+                { ...this.value[index], ...data },
+                ...this.value.slice(index + 1),
+            ]);
         },
         deleteItem(id) {
             const index = _.findIndex(this.value, { id });

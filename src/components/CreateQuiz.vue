@@ -23,19 +23,21 @@
                 <br />
                 <MultipleFormItem v-model="data.questions">
                     <template v-slot="{ index, item, updateItem, deleteItem, canAdd, addItem, canDelete }">
-                        <CreateQuestionCard
+                        <QuestionCard
                             :key="item.id"
                             :value="item"
                             :index="index"
                             :canAdd="canAdd"
                             :canDelete="canDelete"
+                            :disable="false"
                             @add="addItem({ options: [{ id: Date.now() }] })"
                             @update="updateItem($event, item.id)"
                             @delete="deleteItem(item.id)"
-                        />
+                        >
+                        </QuestionCard>
                     </template>
                 </MultipleFormItem>
-                <a-button type="info" size="large" class="my-3" @click="create('Incomplete Questions')">
+                <a-button type="info" size="large" class="my-3" @click="create()">
                     {{ data.id ? "Update Quiz" : "Create Quiz" }}
                 </a-button>
             </div>
@@ -44,13 +46,13 @@
 </template>
 
 <script>
-import CreateQuestionCard from "./CreateQuestionCard.vue";
+import QuestionCard from "./QuestionCard.vue";
 import MultipleFormItem from "./MultipleFormItem.vue";
 import { createQuiz, editQuiz, getQuiz } from "@/API/api";
 export default {
     name: "CreateQuiz",
     components: {
-        CreateQuestionCard,
+        QuestionCard,
         MultipleFormItem,
     },
     created() {

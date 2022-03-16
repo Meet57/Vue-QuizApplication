@@ -1,10 +1,11 @@
 <template>
     <div class="my-3">
-        <a-card style="width: 300px">
+        <a-card style="width: 300px" :hoverable="true">
             <div slot="title">
-                <a-input :placeholder="'Question ' + (index + 1)" v-model="text" />
+                <div v-if="disable">{{ value.text }}</div>
+                <a-input v-else :placeholder="'Question ' + (index + 1)" v-model="text" />
             </div>
-            <div slot="extra" class="ml-1" href="#">
+            <div slot="extra" class="ml-1">
                 <div class="flex">
                     <img
                         v-if="canDelete"
@@ -22,25 +23,27 @@
                     />
                 </div>
             </div>
-            <MultipleFormItem v-model="options">
-                <template v-slot="{ index, item, updateItem, deleteItem, canAdd, addItem, canDelete }">
-                    <OptionValues
-                        :key="item.id"
-                        :value="item"
-                        :index="index"
-                        :canAdd="canAdd"
-                        :canDelete="canDelete"
-                        @add="addItem()"
-                        @update="updateItem($event, item.id)"
-                        @delete="deleteItem(item.id)"
-                    />
-                </template>
-            </MultipleFormItem>
-            <br />
-            <div class="flex items-center">
-                <div class="text-green-600 mr-3 text-xl">Answer</div>
-                <a-select style="width: 200px" placeholder="Answer" v-model="answer" :options="answerOptions"> </a-select>
-            </div>
+            <slot name="options">
+                <MultipleFormItem v-model="options">
+                    <template v-slot="{ index, item, updateItem, deleteItem, canAdd, addItem, canDelete }">
+                        <OptionValues
+                            :key="item.id"
+                            :value="item"
+                            :index="index"
+                            :canAdd="canAdd"
+                            :canDelete="canDelete"
+                            @add="addItem()"
+                            @update="updateItem($event, item.id)"
+                            @delete="deleteItem(item.id)"
+                        />
+                    </template>
+                </MultipleFormItem>
+                <br />
+                <div class="flex items-center">
+                    <div class="text-green-600 mr-3 text-xl">Answer</div>
+                    <a-select style="width: 200px" placeholder="Answer" v-model="answer" :options="answerOptions"> </a-select>
+                </div>
+            </slot>
         </a-card>
     </div>
 </template>
@@ -49,7 +52,7 @@
 import MultipleFormItem from "./MultipleFormItem.vue";
 import OptionValues from "./OptionValues.vue";
 export default {
-    name: "CreateQuestionCard",
+    name: "QuestionCard",
     components: {
         OptionValues,
         MultipleFormItem,
@@ -61,11 +64,12 @@ export default {
         },
         canAdd: {
             type: Boolean,
-            required: true,
         },
         canDelete: {
             type: Boolean,
-            required: true,
+        },
+        disable: {
+            type: Boolean,
         },
         index: {
             type: Number,

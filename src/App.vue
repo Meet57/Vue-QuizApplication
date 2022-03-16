@@ -8,4 +8,7 @@
 img {
     cursor: pointer;
 }
+.ant-card-head-title {
+    white-space: normal !important;
+}
 </style>

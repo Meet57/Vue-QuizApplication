@@ -4,14 +4,18 @@
             <h1 class="text-4xl mt-5 text-blue-500">Take Quiz</h1>
             <a-button type="danger" class="mt-3 ml-3" @click="back"> Back </a-button>
         </div>
-        <div>
-            <div v-if="data == null" class="flex justify-center">
+        <div class="flex justify-center">
+            <div v-if="data == null" class="">
                 <a-spin size="large" />
             </div>
             <div v-else class="mx-5">
                 <MultipleFormItem v-model="data.questions">
                     <template v-slot="{ item, index }">
-                        <TakeQuestionCard :value="item" :index="index" @select="onChange($event, index, item.answer)" />
+                        <QuestionCard :id="'question' + index" :value="item" :disable="true" :index="index">
+                            <template #options>
+                                <a-radio-group :options="getOptions(item.options)" @change="onChange($event.target.value, index, item.answer)" />
+                            </template>
+                        </QuestionCard>
                     </template>
                 </MultipleFormItem>
                 <a-button type="info" size="large" class="mt-3" @click="submit"> Submit </a-button>
@@ -23,12 +27,12 @@
 <script>
 import { getQuiz, submitSubmission } from "../API/api";
 import MultipleFormItem from "./MultipleFormItem.vue";
-import TakeQuestionCard from "./TakeQuestionCard.vue";
+import QuestionCard from "./QuestionCard.vue";
 export default {
-    name: "take-quiz",
+    name: "TakeQuiz",
     components: {
         MultipleFormItem,
-        TakeQuestionCard,
+        QuestionCard,
     },
     created() {
         getQuiz(this.id)
@@ -54,6 +58,9 @@ export default {
                 return false;
             }
             return true;
+        },
+        getOptions(list) {
+            return list.map((op) => ({ label: op.text, value: op.text }));
         },
         onChange(value, index, answer) {
             this.marks.splice(index, 1, value == answer);
