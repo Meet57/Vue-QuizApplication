@@ -33,24 +33,17 @@
                 </div>
             </div>
             <slot name="options">
-                <MultipleFormItem v-model="options">
+                <MultipleFormItem v-model="options" :min="2">
                     <template
-                        #default="{
-                            index,
-                            item,
-                            updateItem,
-                            deleteItem,
-                            canAdd,
-                            addItem,
-                            canDelete,
-                        }"
+                        #default="{ index, item, updateItem, deleteItem, canAdd, addItem, size }"
                     >
                         <QuestionCardOptions
                             :key="item.id"
                             :value="item"
                             :index="index"
+                            :options="options"
                             :can-add="canAdd"
-                            :can-delete="canDelete"
+                            :can-delete="size > 2"
                             @add="addItem()"
                             @update="updateItem($event, item.id)"
                             @delete="deleteItem(item.id)"

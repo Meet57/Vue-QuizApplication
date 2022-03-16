@@ -4,11 +4,27 @@ import router from "./router";
 import "./tailwind.css";
 import "ant-design-vue/dist/antd.css";
 import Antd from "ant-design-vue";
-import { ValidationProvider } from "vee-validate/dist/vee-validate.full.esm";
-import { ValidationObserver } from "vee-validate";
+import { ValidationObserver, ValidationProvider, extend, localize } from "vee-validate";
+import en from "vee-validate/dist/locale/en.json";
+import * as rules from "vee-validate/dist/rules";
 
-Vue.component("ValidationProvider", ValidationProvider);
+Object.keys(rules).forEach((rule) => {
+    extend(rule, rules[rule]);
+});
+
+localize("en", en);
+
+extend("checkOption", {
+    params: ["array"],
+    validate: (value, { array }) => {
+        return array.filter((t) => t.text == value).length <= 1;
+    },
+    message: "Option Repeated",
+});
+
+// Install components globally
 Vue.component("ValidationObserver", ValidationObserver);
+Vue.component("ValidationProvider", ValidationProvider);
 
 Vue.config.productionTip = false;
 

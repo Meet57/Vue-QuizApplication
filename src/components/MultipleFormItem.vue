@@ -4,6 +4,7 @@
             <slot
                 :item="currentItem"
                 :index="index"
+                :size="value.length"
                 :addItem="addItem"
                 :update-item="(data, id) => updateItem(data, id)"
                 :delete-item="(id) => deleteItem(id)"

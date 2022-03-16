@@ -2,7 +2,7 @@
     <div class="container">
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-cyan-500">
-                {{ data.quiz ? "Quiz : " + data.quiz : "Quiz Assesment" }}
+                {{ data ? "Quiz : " + data.quiz : "Quiz Assesment" }}
             </h1>
             <button
                 class="mt-3 ml-3 text-white rounded bg-red-500 px-3 py-2 mx-1 hover:bg-red-400"
@@ -12,7 +12,7 @@
             </button>
         </div>
         <div class="flex justify-center">
-            <div v-if="data == null" class="">
+            <div v-if="data == null">
                 <a-spin size="large" />
             </div>
             <div v-else>
@@ -144,52 +144,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-.ant-radio-wrapper {
-    display: block !important;
-}
-
-.shake {
-    /* Start the shake animation and make the animation last for 0.5 seconds */
-    animation: shake 1s;
-    background-color: rgba(255, 0, 0, 0.158);
-    /* When the animation is finished, start again */
-    animation-iteration-count: 1;
-}
-@keyframes shake {
-    0% {
-        transform: translate(1px, 1px) rotate(0deg);
-    }
-    10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-    }
-    20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-    }
-    30% {
-        transform: translate(3px, 2px) rotate(0deg);
-    }
-    40% {
-        transform: translate(1px, -1px) rotate(1deg);
-    }
-    50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-    }
-    60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-    }
-    70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-    }
-    80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-    }
-    90% {
-        transform: translate(1px, 2px) rotate(0deg);
-    }
-    100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-    }
-}
-</style>

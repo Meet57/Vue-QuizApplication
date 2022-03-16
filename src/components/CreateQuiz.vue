@@ -57,7 +57,11 @@
                                     :can-add="canAdd"
                                     :can-delete="canDelete"
                                     :disable="false"
-                                    @add="addItem({ options: [{ id: Date.now() }] })"
+                                    @add="
+                                        addItem({
+                                            options: [{ id: uuidv4 }],
+                                        })
+                                    "
                                     @update="updateItem($event, item.id)"
                                     @delete="deleteItem(item.id)"
                                 >
@@ -82,6 +86,8 @@
 import QuestionCard from "./QuestionCard.vue";
 import MultipleFormItem from "./MultipleFormItem.vue";
 import { createQuiz, editQuiz, getQuiz } from "@/API/api";
+import { v4 as uuidv4 } from "uuid";
+
 export default {
     name: "CreateQuiz",
     components: {
@@ -103,13 +109,18 @@ export default {
             this.loading = false;
         }
     },
+    computed: {
+        uuidv4() {
+            return uuidv4();
+        },
+    },
     data() {
         return {
             loading: true,
             data: {
                 quiz: "",
                 negative: false,
-                questions: [{ id: Date.now(), options: [{ id: Date.now() }] }],
+                questions: [{ id: uuidv4(), options: [{ id: uuidv4() }, { id: uuidv4() }] }],
             },
         };
     },
