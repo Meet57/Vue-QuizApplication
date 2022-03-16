@@ -2,8 +2,17 @@
     <div class="my-3">
         <a-card style="width: 300px" :hoverable="true">
             <div slot="title">
-                <div v-if="disable">{{ value.text }}</div>
-                <a-input v-else :placeholder="'Question ' + (index + 1)" v-model="text" />
+                <ValidationProvider
+                    :name="'Question ' + (index + 1)"
+                    rules="required"
+                    v-slot="{ errors }"
+                >
+                    <div v-if="disable">{{ value.text }}</div>
+                    <a-input v-else :placeholder="'Question ' + (index + 1)" v-model="text" />
+                    <div class="error">
+                        {{ errors[0] }}
+                    </div>
+                </ValidationProvider>
             </div>
             <div slot="extra" class="ml-1">
                 <div class="flex">
@@ -50,14 +59,19 @@
                 </MultipleFormItem>
                 <br />
                 <div class="flex items-center">
-                    <div class="text-green-600 mr-3 text-xl">Answer</div>
-                    <a-select
-                        style="width: 200px"
-                        placeholder="Answer"
-                        v-model="answer"
-                        :options="answerOptions"
-                    >
-                    </a-select>
+                    <ValidationProvider name="Answer" rules="required" v-slot="{ errors }">
+                        <div class="text-green-600 mr-3 text-xl">Answer</div>
+                        <a-select
+                            style="width: 200px"
+                            placeholder="Answer"
+                            v-model="answer"
+                            :options="answerOptions"
+                        >
+                        </a-select>
+                        <div class="error">
+                            {{ errors[0] }}
+                        </div>
+                    </ValidationProvider>
                 </div>
             </slot>
         </a-card>

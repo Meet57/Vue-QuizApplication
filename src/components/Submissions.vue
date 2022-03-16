@@ -2,7 +2,12 @@
     <div class="container">
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-blue-500">Submissions</h1>
-            <a-button type="danger" class="mt-3 ml-3" @click="back"> Back </a-button>
+            <button
+                class="mt-3 ml-3 text-white rounded bg-red-500 px-3 py-2 mx-1 hover:bg-red-400"
+                @click="back"
+            >
+                Back
+            </button>
         </div>
         <div v-if="submissions" class="mx-5">
             <a-table :columns="columns" :data-source="submissions" :rowKey="(t) => t.id">

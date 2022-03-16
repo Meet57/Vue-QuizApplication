@@ -15,12 +15,20 @@
         <div class="flex justify-between place-items-center mx-5">
             <h1 class="text-4xl mt-5 text-blue-500">All Quiz</h1>
             <div>
-                <a-button type="primary" class="mt-3 ml-3" @click="submissions">
+                <button
+                    type="primary"
+                    class="text-white rounded bg-blue-500 px-3 py-2 mx-1 hover:bg-blue-400"
+                    @click="submissions"
+                >
                     Submissions
-                </a-button>
-                <a-button type="primary" class="mt-3 ml-3" @click="createForm">
+                </button>
+                <button
+                    type="primary"
+                    class="text-white rounded bg-blue-500 px-3 py-2 mx-1 hover:bg-blue-400"
+                    @click="createForm"
+                >
                     Create Quiz
-                </a-button>
+                </button>
             </div>
         </div>
         <div class="flex" v-if="quiz">
@@ -46,7 +54,11 @@
                             />
                         </router-link>
                         <router-link :to="'/quiz/' + qu.id">
-                            <a-button type="danger"> Take Quiz </a-button>
+                            <button
+                                class="text-white rounded bg-lime-500 px-3 py-2 mx-1 hover:bg-lime-400"
+                            >
+                                Take Quiz
+                            </button>
                         </router-link>
                     </div>
                 </a-card>

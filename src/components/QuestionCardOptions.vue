@@ -1,7 +1,12 @@
 <template>
     <div class="flex items-center">
         <div class="text-blue-500 text-xl mr-2 flex">#{{ index + 1 }}</div>
-        <a-input v-model="text" :placeholder="'Option ' + (index + 1)" />
+        <ValidationProvider :name="'Option' + (index + 1)" rules="required" v-slot="{ errors }">
+            <a-input v-model="text" :placeholder="'Option ' + (index + 1)" />
+            <div class="error">
+                {{ errors[0] }}
+            </div>
+        </ValidationProvider>
         <div
             v-if="canDelete"
             class="mx-1 imageButton"

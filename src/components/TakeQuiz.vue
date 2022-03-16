@@ -1,14 +1,21 @@
 <template>
     <div class="container">
         <div class="flex justify-between place-items-center mx-5">
-            <h1 class="text-4xl mt-5 text-blue-500">Take Quiz</h1>
-            <a-button type="danger" class="mt-3 ml-3" @click="back"> Back </a-button>
+            <h1 class="text-4xl mt-5 text-cyan-500">
+                {{ data.quiz ? "Quiz : " + data.quiz : "Quiz Assesment" }}
+            </h1>
+            <button
+                class="mt-3 ml-3 text-white rounded bg-red-500 px-3 py-2 mx-1 hover:bg-red-400"
+                @click="back"
+            >
+                Back
+            </button>
         </div>
         <div class="flex justify-center">
             <div v-if="data == null" class="">
                 <a-spin size="large" />
             </div>
-            <div v-else class="mx-5">
+            <div v-else>
                 <MultipleFormItem v-model="data.questions">
                     <template #default="{ item, index }">
                         <QuestionCard
@@ -26,7 +33,14 @@
                         </QuestionCard>
                     </template>
                 </MultipleFormItem>
-                <a-button type="info" size="large" class="mt-3" @click="submit"> Submit </a-button>
+                <button
+                    type="info"
+                    size="large"
+                    class="my-3 text-blue-500 border border-blue-500 py-2 px-3 rounded hover:text-white hover:bg-blue-500"
+                    @click="submit"
+                >
+                    Submit
+                </button>
             </div>
         </div>
     </div>

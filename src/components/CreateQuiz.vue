@@ -4,58 +4,75 @@
             <h1 class="text-4xl mt-5 text-blue-500">
                 {{ data.id ? "Edit Quiz" : "Create Quiz" }}
             </h1>
-            <a-button type="danger" class="mt-3 ml-3" @click="$router.push('/')"> Back </a-button>
+            <button
+                type="danger"
+                class="mt-3 ml-3 text-white rounded bg-red-500 px-3 py-2 mx-1 hover:bg-red-400"
+                @click="$router.push('/')"
+            >
+                Back
+            </button>
         </div>
         <div class="flex justify-center">
             <div v-if="loading">
                 <a-spin size="large" />
             </div>
             <div v-else>
-                <a-input
-                    size="large"
-                    id="quiz"
-                    v-model="data.quiz"
-                    placeholder="Quiz Title"
-                    style="width: 300px"
-                />
-                <br />
-                <br />
-                Negative Marking :
-                <a-radio-group v-model="data.negative" button-style="solid">
-                    <a-radio-button :value="true"> Yes </a-radio-button>
-                    <a-radio-button :value="false"> No </a-radio-button>
-                </a-radio-group>
-                <br />
-                <br />
-                <MultipleFormItem v-model="data.questions">
-                    <template
-                        #default="{
-                            index,
-                            item,
-                            updateItem,
-                            deleteItem,
-                            canAdd,
-                            addItem,
-                            canDelete,
-                        }"
-                    >
-                        <QuestionCard
-                            :key="item.id"
-                            :value="item"
-                            :index="index"
-                            :can-add="canAdd"
-                            :can-delete="canDelete"
-                            :disable="false"
-                            @add="addItem({ options: [{ id: Date.now() }] })"
-                            @update="updateItem($event, item.id)"
-                            @delete="deleteItem(item.id)"
+                <ValidationObserver v-slot="{ handleSubmit }">
+                    <form @submit.prevent="handleSubmit(create)">
+                        <ValidationProvider name="Quiz Name" rules="required" v-slot="{ errors }">
+                            <a-input
+                                size="large"
+                                id="quiz"
+                                v-model="data.quiz"
+                                placeholder="Quiz Title"
+                                style="width: 300px"
+                            />
+                            <div class="error">{{ errors[0] }}</div>
+                        </ValidationProvider>
+                        <br />
+                        <br />
+                        Negative Marking :
+                        <a-radio-group v-model="data.negative" button-style="solid">
+                            <a-radio-button :value="true"> Yes </a-radio-button>
+                            <a-radio-button :value="false"> No </a-radio-button>
+                        </a-radio-group>
+                        <br />
+                        <br />
+                        <MultipleFormItem v-model="data.questions">
+                            <template
+                                #default="{
+                                    index,
+                                    item,
+                                    updateItem,
+                                    deleteItem,
+                                    canAdd,
+                                    addItem,
+                                    canDelete,
+                                }"
+                            >
+                                <QuestionCard
+                                    :key="item.id"
+                                    :value="item"
+                                    :index="index"
+                                    :can-add="canAdd"
+                                    :can-delete="canDelete"
+                                    :disable="false"
+                                    @add="addItem({ options: [{ id: Date.now() }] })"
+                                    @update="updateItem($event, item.id)"
+                                    @delete="deleteItem(item.id)"
+                                >
+                                </QuestionCard>
+                            </template>
+                        </MultipleFormItem>
+                        <button
+                            type="submit"
+                            size="large"
+                            class="my-3 text-blue-500 border border-blue-500 py-2 px-3 rounded hover:text-white hover:bg-blue-500"
                         >
-                        </QuestionCard>
-                    </template>
-                </MultipleFormItem>
-                <a-button type="info" size="large" class="my-3" @click="create()">
-                    {{ data.id ? "Update Quiz" : "Create Quiz" }}
-                </a-button>
+                            {{ data.id ? "Update Quiz" : "Create Quiz" }}
+                        </button>
+                    </form>
+                </ValidationObserver>
             </div>
         </div>
     </div>
@@ -110,21 +127,15 @@ export default {
             return returnValue;
         },
         create() {
-            if (this.data.quiz.length == 0) {
-                this.openNotification("error", "Enter title", " ");
-            } else if (!this.checkForTextInArray(this.data.questions)) {
-                this.openNotification("error", "Invalid Quiz Data", "Please check for empty Field");
+            if (this.data.id) {
+                editQuiz(this.data).then(() => {
+                    this.$router.push("/");
+                });
             } else {
-                if (this.data.id) {
-                    editQuiz(this.data).then(() => {
-                        this.$router.push("/");
-                    });
-                } else {
-                    this.openNotification("success", "Quiz Created");
-                    createQuiz(this.data).then(() => {
-                        this.$router.push("/");
-                    });
-                }
+                this.openNotification("success", "Quiz Created");
+                createQuiz(this.data).then(() => {
+                    this.$router.push("/");
+                });
             }
         },
         openNotification(type, title, body = " ") {
@@ -138,46 +149,8 @@ export default {
 </script>
 
 <style>
-.shake {
-    /* Start the shake animation and make the animation last for 0.5 seconds */
-    animation: shake 1s;
-    background-color: rgba(255, 0, 0, 0.158);
-    /* When the animation is finished, start again */
-    animation-iteration-count: 1;
-}
-@keyframes shake {
-    0% {
-        transform: translate(1px, 1px) rotate(0deg);
-    }
-    10% {
-        transform: translate(-1px, -2px) rotate(-1deg);
-    }
-    20% {
-        transform: translate(-3px, 0px) rotate(1deg);
-    }
-    30% {
-        transform: translate(3px, 2px) rotate(0deg);
-    }
-    40% {
-        transform: translate(1px, -1px) rotate(1deg);
-    }
-    50% {
-        transform: translate(-1px, 2px) rotate(-1deg);
-    }
-    60% {
-        transform: translate(-3px, 1px) rotate(0deg);
-    }
-    70% {
-        transform: translate(3px, 1px) rotate(-1deg);
-    }
-    80% {
-        transform: translate(-1px, -1px) rotate(1deg);
-    }
-    90% {
-        transform: translate(1px, 2px) rotate(0deg);
-    }
-    100% {
-        transform: translate(1px, -2px) rotate(-1deg);
-    }
+.error {
+    color: red;
+    font-size: 10px;
 }
 </style>
