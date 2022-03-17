@@ -92,7 +92,7 @@ export default {
             deleteQuiz(id).then(() => {
                 getQuizes()
                     .then((data) => {
-                        this.quiz = data;
+                        this.quiz = Object.freeze(data);
                     })
                     .catch(() => {});
             });

@@ -59,7 +59,7 @@ export default {
     created() {
         getQuiz(this.id)
             .then((data) => {
-                this.data = data;
+                this.data = Object.freeze(data);
                 this.marks = Array(data.questions.length).fill(null);
             })
             .catch(() => {
