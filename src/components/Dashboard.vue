@@ -31,9 +31,9 @@
                 </button>
             </div>
         </div>
-        <div class="flex" v-if="quiz">
-            <div class="flex" v-for="qu in quiz" :key="qu.id">
-                <a-card :title="qu.quiz" style="width: 400px; margin: 20px">
+        <div class="flex flex-wrap" v-if="quiz">
+            <div v-for="qu in quiz" :key="qu.id">
+                <a-card :title="qu.quiz" style="width: 400px; margin: 10px">
                     <div slot="extra" class="flex">
                         <a-popconfirm
                             title="Are you sure？"
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { deleteQuiz, getQuizes } from "../API/api";
+import { worker } from "../API/api";
 export default {
     name: "BaseDashboard",
     data() {
@@ -89,8 +89,9 @@ export default {
             this.$router.push("/create");
         },
         deletequiz(id) {
-            deleteQuiz(id).then(() => {
-                getQuizes()
+            worker.deleteQuiz(id).then(() => {
+                worker
+                    .getQuizes()
                     .then((data) => {
                         this.quiz = Object.freeze(data);
                     })
@@ -108,7 +109,7 @@ export default {
         if (!localStorage.getItem("name")) {
             this.visible = true;
         }
-        getQuizes().then((data) => {
+        worker.getQuizes().then((data) => {
             this.quiz = data;
         });
     },

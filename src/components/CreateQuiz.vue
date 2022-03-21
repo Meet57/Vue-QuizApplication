@@ -85,7 +85,7 @@
 <script>
 import QuestionCard from "./QuestionCard.vue";
 import MultipleFormItem from "./MultipleFormItem.vue";
-import { createQuiz, editQuiz, getQuiz } from "@/API/api";
+import { worker } from "@/API/api";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
@@ -96,7 +96,8 @@ export default {
     },
     created() {
         if (this.$route.params.id) {
-            getQuiz(this.$route.params.id)
+            worker
+                .getQuiz(this.$route.params.id)
                 .then((data) => {
                     if (!data.quiz) {
                         this.$router.push("/404/");
@@ -139,14 +140,19 @@ export default {
         },
         create() {
             if (this.data.id) {
-                editQuiz(this.data).then(() => {
+                worker.editQuiz(this.data).then(() => {
                     this.$router.push("/");
                 });
             } else {
                 this.openNotification("success", "Quiz Created");
-                createQuiz(this.data).then(() => {
-                    this.$router.push("/");
-                });
+                worker
+                    .createQuiz(this.data)
+                    .then(() => {
+                        this.$router.push("/");
+                    })
+                    .catch((e) => {
+                        console.log(e);
+                    });
             }
         },
         openNotification(type, title, body = " ") {

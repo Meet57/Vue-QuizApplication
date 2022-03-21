@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { getQuiz, submitSubmission } from "../API/api";
+import { worker } from "../API/api";
 import MultipleFormItem from "./MultipleFormItem.vue";
 import QuestionCard from "./QuestionCard.vue";
 export default {
@@ -57,7 +57,8 @@ export default {
         QuestionCard,
     },
     created() {
-        getQuiz(this.id)
+        worker
+            .getQuiz(this.id)
             .then((data) => {
                 this.data = Object.freeze(data);
                 this.marks = Array(data.questions.length).fill(null);
@@ -115,12 +116,12 @@ export default {
                     score = this.marks.filter((value) => value == true).length;
                 }
                 this.result = `${score}/${this.marks.length}`;
-                submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result).then(
-                    () => {
+                worker
+                    .submitSubmission(localStorage.getItem("name"), this.data.quiz, this.result)
+                    .then(() => {
                         this.$router.push("/");
                         this.openNotification("success", "Your Score", this.result);
-                    }
-                );
+                    });
             } else {
                 let incomplete = [];
                 this.openNotification(

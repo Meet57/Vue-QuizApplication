@@ -58,7 +58,7 @@
 
 <script>
 import _ from "lodash";
-import { getSubmissions } from "@/API/api";
+import { worker } from "@/API/api";
 
 const getScore = (score) => {
     let scorelist = score.split("/");
@@ -68,7 +68,7 @@ const getScore = (score) => {
 export default {
     name: "QuizSubmissions",
     created() {
-        getSubmissions().then((data) => {
+        worker.getSubmissions().then((data) => {
             this.submissions = data;
             // let namefilter = [];
             // data.forEach((data) => {
