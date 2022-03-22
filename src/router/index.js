@@ -1,10 +1,5 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Dashboard from "../components/Dashboard";
-import CreateQuiz from "../components/CreateQuiz";
-import TakeQuiz from "../components/TakeQuiz";
-import Submissions from "../components/Submissions";
-import ErrorPage from "../components/ErrorPage";
 
 Vue.use(VueRouter);
 
@@ -12,32 +7,32 @@ const routes = [
     {
         path: "/",
         name: "all-quiz",
-        component: Dashboard,
+        component: () => import("../components/Dashboard"),
     },
     {
         path: "/create",
         name: "create-quiz",
-        component: CreateQuiz,
+        component: () => import("../components/CreateQuiz"),
     },
     {
         path: "/edit/:id",
         name: "edit-quiz",
-        component: CreateQuiz,
+        component: () => import("../components/CreateQuiz"),
     },
     {
         path: "/submissions",
         name: "submissions",
-        component: Submissions,
+        component: () => import("../components/Submissions"),
     },
     {
         path: "/quiz/:id",
         name: "take-quiz",
-        component: TakeQuiz,
+        component: () => import("../components/TakeQuiz"),
     },
     {
         path: "/404/",
         name: "error-page",
-        component: ErrorPage,
+        component: () => import("../components/ErrorPage"),
     },
 ];
 

@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "upload": "vue-cli-service build && firebase deploy"
+    "upload": "vue-cli-service build && firebase deploy",
+    "build-report": "vue-cli-service build --report"
   },
   "dependencies": {
     "ant-design-vue": "^1.7.8",
